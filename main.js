@@ -7,6 +7,7 @@ d3.csv("colleges.csv", function(error, dataset) {
 
     var avgCost = d3.extent(colleges, function(d){
         return +d["Average Cost"]; });
+
     var medFamInc = d3.extent(colleges, function(d){
         return +d["Median Family Income"]; });
     var medEarnings = d3.extent(colleges, function(d){
@@ -130,7 +131,7 @@ d3.csv("colleges.csv", function(error, dataset) {
 
     //add scatterplot points
     var temp1 = chart1.selectAll("circle")
-       .data(csv)
+       .data(colleges)
        .enter()
        .append("circle")
        .attr("id",function(d,i) {return i;} )
@@ -139,18 +140,19 @@ d3.csv("colleges.csv", function(error, dataset) {
             return xScale(d["Average Cost"]); })
        .attr("cy", function(d) {
             return yScale(d["Median Family Income"]); })
-       .attr("r", 5)
-       .on("click", function(d,i){
-            clearSelection();
-            fillText(d);
-            chart2.selectAll("circle")
-                .classed("selected", function(d2) {
-                    return d == d2;
-                });
-       });
+       .attr("r", 5);
+       //  .on("click", function(d,i){
+       //      clearSelection();
+       //      fillText(d);
+       //      chart2.selectAll("circle")
+       //          .classed("selected", function(d2) {
+       //              return d == d2;
+       //          });
+
+       // });
 
     var temp2 = chart2.selectAll("circle")
-       .data(csv)
+       .data(colleges)
        .enter()
        .append("circle")
        .attr("id",function(d,i) {return i;} )
@@ -159,16 +161,16 @@ d3.csv("colleges.csv", function(error, dataset) {
             return xScale2(d["Median Earnings 8 years After Entry"]); })
        .attr("cy", function(d) {
             return yScale2(d["Number of Employed 8 years after entry"]); })
-       .attr("r", 5)
-       .on("click", function(d,i){
-            clearSelection();
-            fillText(d);
-            chart1.selectAll("circle")
-                .classed("selected2", function(d2) {
-                    return d == d2;
-                });
+       .attr("r", 5);
+       // .on("click", function(d,i){
+       //      clearSelection();
+       //      fillText(d);
+       //      chart1.selectAll("circle")
+       //          .classed("selected2", function(d2) {
+       //              return d == d2;
+       //          });
 
-       });
+       // });
 
 
     chart1 // or something else that selects the SVG element in your visualizations
