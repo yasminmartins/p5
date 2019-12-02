@@ -19,11 +19,40 @@ d3.csv("colleges.csv", function(error, dataset) {
     var expenditure = d3.extent(colleges, function(d){
         return +d["Expenditure Per Student"]; });
 
+    var percentWhite = d3.extent(colleges, function(d){
+        return +d["% White"]; });
+    var percentBlack = d3.extent(colleges, function(d){
+        return +d["% Black"]; });
+    var percentHispanic = d3.extent(colleges, function(d){
+        return +d["% Hispanic"]; });
+    var percentAsian = d3.extent(colleges, function(d){
+        return +d["% Asian"]; });
+    var percentAmericanIndian = d3.extent(colleges, function(d){
+        return +d["% AmericanIndian"]; });
+    var percentPacificIslander = d3.extent(colleges, function(d){
+        return +d["% PacificIslander"]; });
+    var percentBiracial = d3.extent(colleges, function(d){
+        return +d["% Biracial"]; });
 
-    // Create the drop-down list, populated by the color list specified below
-    var regions = ['Far West','Great Lakes', 'Great Plains', 'Mid-Atlantic', 'New England', 'Outlying Areas', 'Rocky Mountains', 'Southeast', 'Southwest']
+    var xDemScale = d3.scaleOrdinal().domain(["% White", "% Black", "% Hispanic", "% Asian", "% American Indian", "% Pacific Islander", "%Biracial"]).range([0,10]);
+    var yDemMax = Math.max(percentWhite, percentBlack, percentHispanic, percentAsian, percentAmericanIndian, percentPacificIslander, percentBiracial);
+    var percentScale = d3.scaleLinear().domain([0, yDemMax]).range([550,50]);
+    var yDemScale = d3.axisLeft(percentScale);
+    var xAxisDem = d3.axisBottom().scale(xDemScale);
+    var yAxisDem = d3.axisBottom().scale(yDemScale);
 
-
+    // var demSVG = d3.select("#chart3").append('g')
+    // .attr('width', width)
+    // .attr('height', height);
+    // demSVG.selectAll('.bar') //region bar graphs
+    //     .data(colleges)
+    //     .enter()
+    //     .append("circle")
+    //     .attr("id",function(d,i) {return i;} )
+    //     .attr("cx", function(d) {
+    //         return xDemScale(d["Median Family Income"]); })
+    //     .attr("cy", function(d) {
+    //         return yDemScale(d["Median Debt on Graduation"]); });
 
 
     // Axis setup
@@ -194,7 +223,7 @@ d3.csv("colleges.csv", function(error, dataset) {
                 return "steelblue";
             }
             if (d["Locale"].match(/City/)) {
-                return "maroon";
+                return "darkblue";
             } else {
                 return "darkgreen"
             }
@@ -327,6 +356,8 @@ d3.csv("colleges.csv", function(error, dataset) {
         .text("Median Debt on Graduation")
         .style("fill", "black");
 
+    var regions = ['Far West','Great Lakes', 'Great Plains', 'Mid-Atlantic', 'New England', 'Outlying Areas', 'Rocky Mountains', 'Southeast', 'Southwest']
+
     var dropdown = d3.select("#chart3")
         .append('select')
         .style("border", "1px solid black")
@@ -340,6 +371,7 @@ d3.csv("colleges.csv", function(error, dataset) {
             return d; })
 
     function filter() {
+        clearText();
         selectValue = d3.select("select").property("value");
         chart1.selectAll("circle")
             .transition()
@@ -352,7 +384,7 @@ d3.csv("colleges.csv", function(error, dataset) {
                         return "steelblue";
                     }
                     if (d["Locale"].match(/City/)) {
-                        return "maroon";
+                        return "darkblue";
                     } else {
                         return "darkgreen"
                     }
@@ -380,6 +412,7 @@ d3.csv("colleges.csv", function(error, dataset) {
         .style("border", "1px solid black")
         .text('Reset Filter')
         .on('click', function() {
+            clearText()
             chart1.selectAll("circle")
             .transition()
             .style('fill', function(d) {
@@ -390,7 +423,7 @@ d3.csv("colleges.csv", function(error, dataset) {
                         return "steelblue";
                     }
                     if (d["Locale"].match(/City/)) {
-                        return "maroon";
+                        return "darkblue";
                     } else {
                         return "darkgreen"
                     }
