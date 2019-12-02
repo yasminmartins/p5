@@ -7,20 +7,24 @@ d3.csv("colleges.csv", function(error, dataset) {
 
     var avgCost = d3.extent(colleges, function(d){
         return +d["Average Cost"]; });
+    var medEarnings = d3.extent(colleges, function(d){
+        return +d["Median Earnings 8 years After Entry"]; });
+    var expenditure = d3.extent(colleges, function(d){
+        return +d["Expenditure Per Student"]; });
 
     var medFamInc = d3.extent(colleges, function(d){
         return +d["Median Family Income"]; });
-    var medEarnings = d3.extent(colleges, function(d){
-        return +d["Median Earnings 8 years After Entry"]; });
+    var medDebt = d3.extent(colleges, function(d){
+        return +d["Median Debt on Graduation"]; });
     var numEmployed = d3.extent(colleges, function(d){
         return +d["Number of Employed 8 years after entry"]; });
 
     // Axis setup
     var xScale = d3.scaleLinear().domain(avgCost).range([50, 470]);
-    var yScale = d3.scaleLinear().domain(medFamInc).range([470, 30]);
+    var yScale = d3.scaleLinear().domain(medEarnings).range([470, 30]);
 
-    var xScale2 = d3.scaleLinear().domain(medEarnings).range([50, 470]);
-    var yScale2 = d3.scaleLinear().domain(numEmployed).range([470, 30]);
+    var xScale2 = d3.scaleLinear().domain(medFamInc).range([50, 470]);
+    var yScale2 = d3.scaleLinear().domain(medDebt).range([470, 30]);
 
     var xAxis = d3.axisBottom().scale(xScale);
     var yAxis = d3.axisLeft().scale(yScale);
@@ -83,14 +87,14 @@ d3.csv("colleges.csv", function(error, dataset) {
         d3.select("#avgCost").text(d["Average Cost"]);
         d3.select("#medFamInc").text(d["Median Family Income"]);
         d3.select("#medEarnings").text(d["Median Earnings 8 years After Entry"]);
-        d3.select("#numEmployed").text(d["Number of Employed 8 years after entry"]);
+        d3.select("#medDebt").text(d["Median Debt on Graduation"]);
     }
 
     function clearText() {
         d3.select("#avgCost").text("");
         d3.select("#medFamInc").text("");
         d3.select("#medEarnings").text("");
-        d3.select("#numEmployed").text("");
+        d3.select("#medDebt").text("");
     }
 
     function handleBrushMove1() {
@@ -100,7 +104,7 @@ d3.csv("colleges.csv", function(error, dataset) {
             chart2.selectAll("circle")
                 .classed("selected", function(d) {
                     var x = xScale(d["Average Cost"]);
-                    var y = yScale(d["Median Family Income"]);
+                    var y = yScale(d["Median Earnings 8 years After Entry"]);
                     return left <= x && x <= right && top <= y && y <= bottom;
                 });
         }
@@ -113,8 +117,8 @@ d3.csv("colleges.csv", function(error, dataset) {
             var [[left, top], [right, bottom]] = brushSelection2;
             chart1.selectAll("circle")
                 .classed("selected2", function(d) {
-                    var x = xScale2(d["Median Earnings 8 years After Entry"]);
-                    var y = yScale2(d["Number of Employed 8 years after entry"]);
+                    var x = xScale2(d["Median Family Income"]);
+                    var y = yScale2(d["Median Debt on Graduation"]);
                     return left <= x && x <= right && top <= y && y <= bottom;
                 });
         }
@@ -139,7 +143,7 @@ d3.csv("colleges.csv", function(error, dataset) {
        .attr("cx", function(d) {
             return xScale(d["Average Cost"]); })
        .attr("cy", function(d) {
-            return yScale(d["Median Family Income"]); })
+            return yScale(d["Median Earnings 8 years After Entry"]); })
        .attr("r", 5);
        //  .on("click", function(d,i){
        //      clearSelection();
@@ -158,9 +162,9 @@ d3.csv("colleges.csv", function(error, dataset) {
        .attr("id",function(d,i) {return i;} )
        .attr("stroke", "black")
        .attr("cx", function(d) {
-            return xScale2(d["Median Earnings 8 years After Entry"]); })
+            return xScale2(d["Median Family Income"]); })
        .attr("cy", function(d) {
-            return yScale2(d["Number of Employed 8 years after entry"]); })
+            return yScale2(d["Median Debt on Graduation"]); })
        .attr("r", 5);
        // .on("click", function(d,i){
        //      clearSelection();
@@ -195,7 +199,7 @@ d3.csv("colleges.csv", function(error, dataset) {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Median Family Income")
+        .text("Median Earnings 8 Years After Entry")
         .style("fill", "black");
 
     chart2 // or something else that selects the SVG element in your visualizations
@@ -207,7 +211,7 @@ d3.csv("colleges.csv", function(error, dataset) {
         .attr("x", width-16)
         .attr("y", -6)
         .style("text-anchor", "end")
-        .text("Median Earnings 8 years After Entry")
+        .text("Median Family Income")
         .style("fill", "black");
 
     chart2 // or something else that selects the SVG element in your visualizations
@@ -220,6 +224,6 @@ d3.csv("colleges.csv", function(error, dataset) {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Number of Employed 8 Years After Entry")
+        .text("Median Debt on Graduation")
         .style("fill", "black");
     });
