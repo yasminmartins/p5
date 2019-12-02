@@ -44,6 +44,19 @@ d3.csv("colleges.csv", function(error, dataset) {
     var xAxis2 = d3.axisBottom().scale(xScale2).ticks(10).tickFormat(d3.format(".2s"));
     var yAxis2 = d3.axisLeft().scale(yScale2).ticks(10).tickFormat(d3.format(".2s"));
 
+    var tooltip1 = d3.select("#chart1")
+        .append("div")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("background", "#ffffff")
+
+    var tooltip2 = d3.select("#chart2")
+        .append("div")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("background", "#ffffff")
+
+
 
     //Create SVGs for charts
     var chart1 = d3.select("#chart1")
@@ -160,23 +173,6 @@ d3.csv("colleges.csv", function(error, dataset) {
         clearText();
     }
 
-        function handleMouseOver(d, i) {  // Add interactivity
-
-            // Use D3 to select element, change color and size
-            d3.select(this).attr({
-              fill: "orange",
-            });
-
-
-          }
-
-        function handleMouseOut(d, i) {
-            // Use D3 to select element, change color back to normal
-            d3.select(this).attr({
-              fill: "black",
-            });
-          }
-
 
     chart1.append('g')
         .attr('class', 'brush')
@@ -217,8 +213,13 @@ d3.csv("colleges.csv", function(error, dataset) {
             return yScale(d["Median Earnings 8 years After Entry"]); })
        .attr("r", function(d) {
             return rScale(d["Number of Employed 8 years after entry"]); })
-        .on("mouseover", handleMouseOver)
-        .on("mouseout", handleMouseOut)
+        .on("mouseover", function(d){
+            tooltip1.text(d["Name"]);
+            return tooltip1.style("visibility", "visible");})
+        .on("mousemove", function(){
+            return tooltip1.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+        .on("mouseout", function(){
+            return tooltip1.style("visibility", "hidden");})
         .on("click", function(d,i){
             clearSelection();
             fillText(d);
@@ -251,6 +252,13 @@ d3.csv("colleges.csv", function(error, dataset) {
             return yScale2(d["Median Debt on Graduation"]); })
        .attr("r", function(d) {
             return rScale2(d["Expenditure Per Student"]); })
+        .on("mouseover", function(d){
+            tooltip2.text(d["Name"]);
+            return tooltip2.style("visibility", "visible");})
+        .on("mousemove", function(){
+            return tooltip2.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+        .on("mouseout", function(){
+            return tooltip2.style("visibility", "hidden");})
        .on("click", function(d,i){
             clearSelection();
             fillText(d);
@@ -265,41 +273,16 @@ d3.csv("colleges.csv", function(error, dataset) {
 
        });
 
-    // Create filter button
-    d3.selectAll("circle")
-        .append('p')
-        .append('button')
-        .style("border", "1px solid black")
-        .text('Filter Data')
-        // .on('click', function() {
-        //     bars.selectAll('.bar')
-        //         .transition()
-        //         .duration(500)
-        //         .delay(function(d) { return yScale(d.letter) })
-        //         .style('fill', function(d) {
-        //             if (d.frequency >= cutoffVal) {
-        //                 return d3.select('select').property('value')
-        //             }
-        //         })
-        //         .attr('width', function(d) {
-        //             if (d.frequency >= cutoffVal) {
-        //                 return xScale(d.frequency)
-        //             } else {
-        //                 return 0;
-        //             }
-        //         })
-        // })
-        ;
 
 
     chart1 // or something else that selects the SVG element in your visualizations
         .append("g") // create a group node
-        .attr("transform", "translate(0,"+ (width -30)+ ")")
+        .attr("transform", "translate(0,"+ (width -40)+ ")")
         .call(xAxis) // call the axis generator
         .append("text")
         .attr("class", "label")
-        .attr("x", width-16)
-        .attr("y", -6)
+        .attr("x", width-200)
+        .attr("y", 35)
         .style("text-anchor", "end")
         .text("Average Cost")
         .style("fill", "black");
@@ -311,7 +294,8 @@ d3.csv("colleges.csv", function(error, dataset) {
         .append("text")
         .attr("class", "label")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
+        .attr("y", -45)
+        .attr("x", -150)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Median Earnings 8 Years After Entry")
@@ -319,12 +303,12 @@ d3.csv("colleges.csv", function(error, dataset) {
 
     chart2 // or something else that selects the SVG element in your visualizations
         .append("g") // create a group node
-        .attr("transform", "translate(0,"+ (width - 30)+ ")")
+        .attr("transform", "translate(0,"+ (width - 40)+ ")")
         .call(xAxis2)
         .append("text")
         .attr("class", "label")
-        .attr("x", width-16)
-        .attr("y", -6)
+        .attr("x", width-200)
+        .attr("y", 35)
         .style("text-anchor", "end")
         .text("Median Family Income")
         .style("fill", "black");
@@ -336,7 +320,8 @@ d3.csv("colleges.csv", function(error, dataset) {
         .append("text")
         .attr("class", "label")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
+        .attr("y", -40)
+        .attr("x", -180)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Median Debt on Graduation")
