@@ -45,13 +45,13 @@ d3.csv("colleges.csv", function(error, dataset) {
         .append("div")
         .style("position", "absolute")
         .style("z-index", "10")
-        .style("background", "#ffffff");
+        .style("background", "white");
 
     var tooltip2 = d3.select("#chart2")
         .append("div")
         .style("position", "absolute")
         .style("z-index", "10")
-        .style("background", "#ffffff");
+        .style("background", "white");
 
 
 
@@ -187,22 +187,16 @@ d3.csv("colleges.csv", function(error, dataset) {
        .append("circle")
        .attr("id",function(d,i) {return i;} )
        .style("fill", function(d) {
-            if(d["Locale"] == "Mid-size Suburb" ||
-               d["Locale"] == "Large Suburb" ||
-               d["Locale"] == "Small Suburb") {
-                return "#4169E1";
+            if(d["Locale"].match(/Suburb/)){
+                return "slategray";
+            }
+            if (d["Locale"].match(/Rural/)) {
+                return "steelblue";
             }
-            if (d["Locale"] == "Distant Rural" ||
-                d["Locale"] == "Remote Rural" ||
-                d["Locale"] == "Fringe Rural") {
-                return "#66CC00"
-            }
-            if (d["Locale"] == "Small City" ||
-                d["Locale"] == "Large City" ||
-                d["Locale"] == "Mid-size City") {
-                return "#ffc04d";
+            if (d["Locale"].match(/City/)) {
+                return "maroon";
             } else {
-                return "#9932CC"
+                return "darkgreen"
             }
        })
        .attr("cx", function(d) {
@@ -239,9 +233,9 @@ d3.csv("colleges.csv", function(error, dataset) {
        .attr("id",function(d,i) {return i;} )
        .style("fill", function(d) {
            if (d["Control"] == "Public") {
-               return "#DAA520";
+               return "thistle";
            } else {
-               return "00CCCC";
+               return "darkmagenta";
            }
        })
        .attr("cx", function(d) {
@@ -333,19 +327,84 @@ d3.csv("colleges.csv", function(error, dataset) {
         .text("Median Debt on Graduation")
         .style("fill", "black");
 
-    d3.select("#chart3")
+    var dropdown = d3.select("#chart3")
         .append('select')
         .style("border", "1px solid black")
-        .selectAll('option')
+        .on('change', filter);
+
+    dropdown.selectAll('option')
         .data(regions)
         .enter()
         .append('option')
         .text(function(d){
-            return d; });
+            return d; })
+
+    function filter() {
+        selectValue = d3.select("select").property("value");
+        chart1.selectAll("circle")
+            .transition()
+            .style('fill', function(d) {
+                if (d.Region == selectValue) {
+                    if(d["Locale"].match(/Suburb/)){
+                        return "slategray";
+                    }
+                    if (d["Locale"].match(/Rural/)) {
+                        return "steelblue";
+                    }
+                    if (d["Locale"].match(/City/)) {
+                        return "maroon";
+                    } else {
+                        return "darkgreen"
+                    }
+                } else
+                    return 'rgba(255,255,255,0)';
+            })
+        chart2.selectAll("circle")
+            .transition()
+            .style('fill', function(d) {
+                if (d.Region == selectValue) {
+                    if (d["Control"] == "Public") {
+                        return "thistle";
+                    } else {
+                        return "darkmagenta";
+                    }
+                } else {
+                    return 'rgba(255,255,255,0)';
+                }
+            })
+        };
 
     d3.select("#chart3")
         .append('p')
         .append('button')
         .style("border", "1px solid black")
-        .text('Reset Filter');
+        .text('Reset Filter')
+        .on('click', function() {
+            chart1.selectAll("circle")
+            .transition()
+            .style('fill', function(d) {
+                if(d["Locale"].match(/Suburb/)){
+                        return "slategray";
+                    }
+                    if (d["Locale"].match(/Rural/)) {
+                        return "steelblue";
+                    }
+                    if (d["Locale"].match(/City/)) {
+                        return "maroon";
+                    } else {
+                        return "darkgreen"
+                    }
+            })
+            chart2.selectAll("circle")
+            .transition()
+            .style('fill', function(d) {
+                if (d["Control"] == "Public") {
+                    return "thistle";
+                } else {
+                    return "darkmagenta";
+                }
+            })
+
+        });
+
 });
