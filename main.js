@@ -9,22 +9,25 @@ d3.csv("colleges.csv", function(error, dataset) {
         return +d["Average Cost"]; });
     var medEarnings = d3.extent(colleges, function(d){
         return +d["Median Earnings 8 years After Entry"]; });
-    var expenditure = d3.extent(colleges, function(d){
-        return +d["Expenditure Per Student"]; });
+    var numEmployed = d3.extent(colleges, function(d){
+        return +d["Number of Employed 8 years after entry"]; });
 
     var medFamInc = d3.extent(colleges, function(d){
         return +d["Median Family Income"]; });
     var medDebt = d3.extent(colleges, function(d){
         return +d["Median Debt on Graduation"]; });
-    var numEmployed = d3.extent(colleges, function(d){
-        return +d["Number of Employed 8 years after entry"]; });
+    var expenditure = d3.extent(colleges, function(d){
+        return +d["Expenditure Per Student"]; });
+
 
     // Axis setup
     var xScale = d3.scaleLinear().domain(avgCost).range([50, 470]);
     var yScale = d3.scaleLinear().domain(medEarnings).range([470, 30]);
+    var rScale = d3.scaleSqrt().domain(numEmployed).range([1,10]);
 
     var xScale2 = d3.scaleLinear().domain(medFamInc).range([50, 470]);
     var yScale2 = d3.scaleLinear().domain(medDebt).range([470, 30]);
+    var rScale2 = d3.scaleSqrt().domain(expenditure).range([1,10]);
 
     var xAxis = d3.axisBottom().scale(xScale);
     var yAxis = d3.axisLeft().scale(yScale);
@@ -144,7 +147,8 @@ d3.csv("colleges.csv", function(error, dataset) {
             return xScale(d["Average Cost"]); })
        .attr("cy", function(d) {
             return yScale(d["Median Earnings 8 years After Entry"]); })
-       .attr("r", 5);
+       .attr("r", function(d) {
+            return rScale2(d["Number of Employed 8 years after entry"] * 4); });
        //  .on("click", function(d,i){
        //      clearSelection();
        //      fillText(d);
@@ -165,7 +169,8 @@ d3.csv("colleges.csv", function(error, dataset) {
             return xScale2(d["Median Family Income"]); })
        .attr("cy", function(d) {
             return yScale2(d["Median Debt on Graduation"]); })
-       .attr("r", 5);
+       .attr("r", function(d) {
+            return rScale2(d["Expenditure Per Student"]); });
        // .on("click", function(d,i){
        //      clearSelection();
        //      fillText(d);
