@@ -1,5 +1,5 @@
-var width =500;
-var height= 500;
+var width = 500;
+var height = 500;
 
 d3.csv("colleges.csv", function(error, dataset) {
 
@@ -19,24 +19,21 @@ d3.csv("colleges.csv", function(error, dataset) {
     var expenditure = d3.extent(colleges, function(d){
         return +d["Expenditure Per Student"]; });
 
-    // var filter = d3.nest()
-    //   .key(function(d) {
-    //         if (d.Control == "Private") {
-    //             return d;
-    //         };
-    //     })
-    //   .entries(dataset);
+
+    // Create the drop-down list, populated by the color list specified below
+    var regions = ['Far West','Great Lakes', 'Great Plains', 'Mid-Atlantic', 'New England', 'Outlying Areas', 'Rocky Mountains', 'Southeast', 'Southwest']
+
 
 
 
     // Axis setup
     var xScale = d3.scaleLinear().domain(avgCost).range([50, 470]);
-    var yScale = d3.scaleLinear().domain(medEarnings).range([470, 30]);
-    var rScale = d3.scaleSqrt().domain(numEmployed).range([2,10]);
+    var yScale = d3.scaleLinear().domain(medEarnings).range([460, 30]);
+    var rScale = d3.scaleSqrt().domain(numEmployed).range([1,10]);
 
     var xScale2 = d3.scaleLinear().domain(medFamInc).range([50, 470]);
-    var yScale2 = d3.scaleLinear().domain(medDebt).range([470, 30]);
-    var rScale2 = d3.scaleSqrt().domain(expenditure).range([2,10]);
+    var yScale2 = d3.scaleLinear().domain(medDebt).range([460, 30]);
+    var rScale2 = d3.scaleSqrt().domain(expenditure).range([1,10]);
 
     var xAxis = d3.axisBottom().scale(xScale).ticks(10).tickFormat(d3.format(".2s"));
     var yAxis = d3.axisLeft().scale(yScale).ticks(10).tickFormat(d3.format(".2s"));
@@ -48,13 +45,13 @@ d3.csv("colleges.csv", function(error, dataset) {
         .append("div")
         .style("position", "absolute")
         .style("z-index", "10")
-        .style("background", "#ffffff")
+        .style("background", "#ffffff");
 
     var tooltip2 = d3.select("#chart2")
         .append("div")
         .style("position", "absolute")
         .style("z-index", "10")
-        .style("background", "#ffffff")
+        .style("background", "#ffffff");
 
 
 
@@ -68,6 +65,7 @@ d3.csv("colleges.csv", function(error, dataset) {
                     .append("svg:svg")
                     .attr("width",width)
                     .attr("height",height);
+
 
     /******************************************
 
@@ -273,7 +271,15 @@ d3.csv("colleges.csv", function(error, dataset) {
 
        });
 
+    chart1.append('text')
+       .attr('class', 'title')
+       .attr('transform', "translate(" + (width / 4 + 10) + ", " + 15 + ")")
+       .text("Cost of College v. Median Earnings 8 Years Post-Entry");
 
+    chart2.append('text')
+       .attr('class', 'title')
+       .attr('transform', "translate(" + (width / 2 - 100) + ", " + 15 + ")")
+       .text("Median Family Income v. Median Debt at Graduation");
 
     chart1 // or something else that selects the SVG element in your visualizations
         .append("g") // create a group node
@@ -282,7 +288,7 @@ d3.csv("colleges.csv", function(error, dataset) {
         .append("text")
         .attr("class", "label")
         .attr("x", width-200)
-        .attr("y", 35)
+        .attr("y", 30)
         .style("text-anchor", "end")
         .text("Average Cost")
         .style("fill", "black");
@@ -308,7 +314,7 @@ d3.csv("colleges.csv", function(error, dataset) {
         .append("text")
         .attr("class", "label")
         .attr("x", width-200)
-        .attr("y", 35)
+        .attr("y", 30)
         .style("text-anchor", "end")
         .text("Median Family Income")
         .style("fill", "black");
@@ -326,4 +332,20 @@ d3.csv("colleges.csv", function(error, dataset) {
         .style("text-anchor", "end")
         .text("Median Debt on Graduation")
         .style("fill", "black");
-    });
+
+    d3.select("#chart3")
+        .append('select')
+        .style("border", "1px solid black")
+        .selectAll('option')
+        .data(regions)
+        .enter()
+        .append('option')
+        .text(function(d){
+            return d; });
+
+    d3.select("#chart3")
+        .append('p')
+        .append('button')
+        .style("border", "1px solid black")
+        .text('Reset Filter');
+});
