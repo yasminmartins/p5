@@ -87,17 +87,29 @@ d3.csv("colleges.csv", function(error, dataset) {
     }
 
     function fillText(d) {
+        d3.select("#name").text(d["Name"]);
+        d3.select("#control").text(d["Control"]);
+        d3.select("#region").text(d["Region"]);
+        d3.select("#locale").text(d["Locale"]);
+        d3.select("#admissionRate").text(d["Admission Rate"]);
+        d3.select("#act").text(d["ACT Median"]);
+        d3.select("#sat").text(d["SAT Average"]);
+        d3.select("#population").text(d["Undergrad Population"]);
         d3.select("#avgCost").text(d["Average Cost"]);
-        d3.select("#medFamInc").text(d["Median Family Income"]);
-        d3.select("#medEarnings").text(d["Median Earnings 8 years After Entry"]);
+        d3.select("#expenditure").text(d["Expenditure Per Student"]);
+        d3.select("#facultySalary").text(d["Average Faculty Salary"]);
         d3.select("#medDebt").text(d["Median Debt on Graduation"]);
+        d3.select("#medFamInc").text(d["Median Family Income"]);
+        d3.select("#numEmployed").text(d["Number of Employed 8 years after entry"]);
+        d3.select("#medEarnings").text(d["Median Earnings 8 years After Entry"]);
+
     }
 
     function clearText() {
-        d3.select("#avgCost").text("");
-        d3.select("#medFamInc").text("");
         d3.select("#medEarnings").text("");
+        d3.select("#avgCost").text("");
         d3.select("#medDebt").text("");
+        d3.select("#medFamInc").text("");
     }
 
     function handleBrushMove1() {
@@ -148,16 +160,16 @@ d3.csv("colleges.csv", function(error, dataset) {
        .attr("cy", function(d) {
             return yScale(d["Median Earnings 8 years After Entry"]); })
        .attr("r", function(d) {
-            return rScale2(d["Number of Employed 8 years after entry"] * 6); });
-       //  .on("click", function(d,i){
-       //      clearSelection();
-       //      fillText(d);
-       //      chart2.selectAll("circle")
-       //          .classed("selected", function(d2) {
-       //              return d == d2;
-       //          });
+            return rScale2(d["Number of Employed 8 years after entry"] * 6); })
+        .on("click", function(d,i){
+            clearSelection();
+            fillText(d);
+            chart2.selectAll("circle")
+                .classed("selected", function(d2) {
+                    return d == d2;
+                });
 
-       // });
+       });
 
     var temp2 = chart2.selectAll("circle")
        .data(colleges)
@@ -170,16 +182,16 @@ d3.csv("colleges.csv", function(error, dataset) {
        .attr("cy", function(d) {
             return yScale2(d["Median Debt on Graduation"]); })
        .attr("r", function(d) {
-            return rScale2(d["Expenditure Per Student"]); });
-       // .on("click", function(d,i){
-       //      clearSelection();
-       //      fillText(d);
-       //      chart1.selectAll("circle")
-       //          .classed("selected2", function(d2) {
-       //              return d == d2;
-       //          });
+            return rScale2(d["Expenditure Per Student"]); })
+       .on("click", function(d,i){
+            clearSelection();
+            fillText(d);
+            chart1.selectAll("circle")
+                .classed("selected2", function(d2) {
+                    return d == d2;
+                });
 
-       // });
+       });
 
 
     chart1 // or something else that selects the SVG element in your visualizations
