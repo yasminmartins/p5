@@ -1,37 +1,32 @@
 var width =500;
 var height= 500;
 
-d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
-    for (var i=0; i<csv.length; ++i) {
-        csv[i].GPA = Number(csv[i].GPA);
-        csv[i].SATM = Number(csv[i].SATM);
-        csv[i].SATV = Number(csv[i].SATV);
-        csv[i].ACT = Number(csv[i].ACT);
-    }
-    var satmExtent = d3.extent(csv, function(row) { return row.SATM; });
-    var satvExtent = d3.extent(csv, function(row) { return row.SATV; });
-    var actExtent = d3.extent(csv, function(row) { return row.ACT;  });
-    var gpaExtent = d3.extent(csv, function(row) {return row.GPA;   });
+d3.csv("colleges.csv", function(error, dataset) {
 
+    colleges = dataset;
 
-    var satExtents = {
-       "SATM": satmExtent,
-       "SATV": satvExtent
-    };
-
+    var avgCost = d3.extent(colleges, function(d){
+        return +d["Average Cost"]; });
+    var medFamInc = d3.extent(colleges, function(d){
+        return +d["Median Family Income"]; });
+    var medEarnings = d3.extent(colleges, function(d){
+        return +d["Median Earnings 8 years After Entry"]; });
+    var numEmployed = d3.extent(colleges, function(d){
+        return +d["Number of Employed 8 years after entry"]; });
 
     // Axis setup
-    var xScale = d3.scaleLinear().domain(satmExtent).range([50, 470]);
-    var yScale = d3.scaleLinear().domain(satvExtent).range([470, 30]);
+    var xScale = d3.scaleLinear().domain(avgCost).range([50, 470]);
+    var yScale = d3.scaleLinear().domain(medFamInc).range([470, 30]);
 
-    var xScale2 = d3.scaleLinear().domain(actExtent).range([50, 470]);
-    var yScale2 = d3.scaleLinear().domain(gpaExtent).range([470, 30]);
+    var xScale2 = d3.scaleLinear().domain(medEarnings).range([50, 470]);
+    var yScale2 = d3.scaleLinear().domain(numEmployed).range([470, 30]);
 
     var xAxis = d3.axisBottom().scale(xScale);
     var yAxis = d3.axisLeft().scale(yScale);
 
     var xAxis2 = d3.axisBottom().scale(xScale2);
     var yAxis2 = d3.axisLeft().scale(yScale2);
+
 
     //Create SVGs for charts
     var chart1 = d3.select("#chart1")
@@ -84,17 +79,17 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
     }
 
     function fillText(d) {
-        d3.select("#satv").text(d.SATV);
-        d3.select("#satm").text(d.SATM);
-        d3.select("#gpa").text(d.GPA);
-        d3.select("#act").text(d.ACT);
+        d3.select("#avgCost").text(d["Average Cost"]);
+        d3.select("#medFamInc").text(d["Median Family Income"]);
+        d3.select("#medEarnings").text(d["Median Earnings 8 years After Entry"]);
+        d3.select("#numEmployed").text(d["Number of Employed 8 years after entry"]);
     }
 
     function clearText() {
-        d3.select("#satv").text("");
-        d3.select("#satm").text("");
-        d3.select("#gpa").text("");
-        d3.select("#act").text("");
+        d3.select("#avgCost").text("");
+        d3.select("#medFamInc").text("");
+        d3.select("#medEarnings").text("");
+        d3.select("#numEmployed").text("");
     }
 
     function handleBrushMove1() {
@@ -103,8 +98,8 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
             var [[left, top], [right, bottom]] = brushSelection1;
             chart2.selectAll("circle")
                 .classed("selected", function(d) {
-                    var x = xScale(d['SATM']);
-                    var y = yScale(d['SATV']);
+                    var x = xScale(d["Average Cost"]);
+                    var y = yScale(d["Median Family Income"]);
                     return left <= x && x <= right && top <= y && y <= bottom;
                 });
         }
@@ -117,8 +112,8 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
             var [[left, top], [right, bottom]] = brushSelection2;
             chart1.selectAll("circle")
                 .classed("selected2", function(d) {
-                    var x = xScale2(d['ACT']);
-                    var y = yScale2(d['GPA']);
+                    var x = xScale2(d["Median Earnings 8 years After Entry"]);
+                    var y = yScale2(d["Number of Employed 8 years after entry"]);
                     return left <= x && x <= right && top <= y && y <= bottom;
                 });
         }
@@ -140,8 +135,10 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
        .append("circle")
        .attr("id",function(d,i) {return i;} )
        .attr("stroke", "black")
-       .attr("cx", function(d) { return xScale(d.SATM); })
-       .attr("cy", function(d) { return yScale(d.SATV); })
+       .attr("cx", function(d) {
+            return xScale(d["Average Cost"]); })
+       .attr("cy", function(d) {
+            return yScale(d["Median Family Income"]); })
        .attr("r", 5)
        .on("click", function(d,i){
             clearSelection();
@@ -158,8 +155,10 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
        .append("circle")
        .attr("id",function(d,i) {return i;} )
        .attr("stroke", "black")
-       .attr("cx", function(d) { return xScale2(d.ACT); })
-       .attr("cy", function(d) { return yScale2(d.GPA); })
+       .attr("cx", function(d) {
+            return xScale2(d["Median Earnings 8 years After Entry"]); })
+       .attr("cy", function(d) {
+            return yScale2(d["Number of Employed 8 years after entry"]); })
        .attr("r", 5)
        .on("click", function(d,i){
             clearSelection();
@@ -181,7 +180,7 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
         .attr("x", width-16)
         .attr("y", -6)
         .style("text-anchor", "end")
-        .text("SATM")
+        .text("Average Cost")
         .style("fill", "black");
 
     chart1 // or something else that selects the SVG element in your visualizations
@@ -194,7 +193,7 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("SATV")
+        .text("Median Family Income")
         .style("fill", "black");
 
     chart2 // or something else that selects the SVG element in your visualizations
@@ -206,7 +205,7 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
         .attr("x", width-16)
         .attr("y", -6)
         .style("text-anchor", "end")
-        .text("ACT")
+        .text("Median Earnings 8 years After Entry")
         .style("fill", "black");
 
     chart2 // or something else that selects the SVG element in your visualizations
@@ -219,6 +218,6 @@ d3.csv("calvinCollegeSeniorScores.csv", function(csv) {
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("GPA")
+        .text("Number of Employed 8 Years After Entry")
         .style("fill", "black");
     });
