@@ -19,6 +19,15 @@ d3.csv("colleges.csv", function(error, dataset) {
     var expenditure = d3.extent(colleges, function(d){
         return +d["Expenditure Per Student"]; });
 
+    // var filter = d3.nest()
+    //   .key(function(d) {
+    //         if (d.Control == "Private") {
+    //             return d;
+    //         };
+    //     })
+    //   .entries(dataset);
+
+
 
     // Axis setup
     var xScale = d3.scaleLinear().domain(avgCost).range([50, 470]);
@@ -29,11 +38,11 @@ d3.csv("colleges.csv", function(error, dataset) {
     var yScale2 = d3.scaleLinear().domain(medDebt).range([470, 30]);
     var rScale2 = d3.scaleSqrt().domain(expenditure).range([1,10]);
 
-    var xAxis = d3.axisBottom().scale(xScale);
-    var yAxis = d3.axisLeft().scale(yScale);
+    var xAxis = d3.axisBottom().scale(xScale).ticks(10).tickFormat(d3.format(".2s"));
+    var yAxis = d3.axisLeft().scale(yScale).ticks(10).tickFormat(d3.format(".2s"));
 
-    var xAxis2 = d3.axisBottom().scale(xScale2);
-    var yAxis2 = d3.axisLeft().scale(yScale2);
+    var xAxis2 = d3.axisBottom().scale(xScale2).ticks(10).tickFormat(d3.format(".2s"));
+    var yAxis2 = d3.axisLeft().scale(yScale2).ticks(10).tickFormat(d3.format(".2s"));
 
 
     //Create SVGs for charts
@@ -151,6 +160,24 @@ d3.csv("colleges.csv", function(error, dataset) {
         clearText();
     }
 
+        function handleMouseOver(d, i) {  // Add interactivity
+
+            // Use D3 to select element, change color and size
+            d3.select(this).attr({
+              fill: "orange",
+            });
+
+
+          }
+
+        function handleMouseOut(d, i) {
+            // Use D3 to select element, change color back to normal
+            d3.select(this).attr({
+              fill: "black",
+            });
+          }
+
+
     chart1.append('g')
         .attr('class', 'brush')
         .call(brush1);
@@ -165,13 +192,33 @@ d3.csv("colleges.csv", function(error, dataset) {
        .enter()
        .append("circle")
        .attr("id",function(d,i) {return i;} )
-       .attr("stroke", "black")
+       .style("fill", function(d) {
+            if(d["Locale"] == "Mid-size Suburb" ||
+               d["Locale"] == "Large Suburb" ||
+               d["Locale"] == "Small Suburb") {
+                return "#4169E1";
+            }
+            if (d["Locale"] == "Distant Rural" ||
+                d["Locale"] == "Remote Rural" ||
+                d["Locale"] == "Fringe Rural") {
+                return "#66CC00"
+            }
+            if (d["Locale"] == "Small City" ||
+                d["Locale"] == "Large City" ||
+                d["Locale"] == "Mid-size City") {
+                return "#ffc04d";
+            } else {
+                return "#9932CC"
+            }
+       })
        .attr("cx", function(d) {
             return xScale(d["Average Cost"]); })
        .attr("cy", function(d) {
             return yScale(d["Median Earnings 8 years After Entry"]); })
        .attr("r", function(d) {
             return rScale2(d["Number of Employed 8 years after entry"] * 6); })
+        .on("mouseover", handleMouseOver)
+        .on("mouseout", handleMouseOut)
         .on("click", function(d,i){
             clearSelection();
             fillText(d);
@@ -191,7 +238,13 @@ d3.csv("colleges.csv", function(error, dataset) {
        .enter()
        .append("circle")
        .attr("id",function(d,i) {return i;} )
-       .attr("stroke", "black")
+       .style("fill", function(d) {
+           if (d["Control"] == "Public") {
+               return "#DAA520";
+           } else {
+               return "00CCCC";
+           }
+       })
        .attr("cx", function(d) {
             return xScale2(d["Median Family Income"]); })
        .attr("cy", function(d) {
@@ -211,6 +264,32 @@ d3.csv("colleges.csv", function(error, dataset) {
                 });
 
        });
+
+    // Create filter button
+    d3.selectAll("circle")
+        .append('p')
+        .append('button')
+        .style("border", "1px solid black")
+        .text('Filter Data')
+        // .on('click', function() {
+        //     bars.selectAll('.bar')
+        //         .transition()
+        //         .duration(500)
+        //         .delay(function(d) { return yScale(d.letter) })
+        //         .style('fill', function(d) {
+        //             if (d.frequency >= cutoffVal) {
+        //                 return d3.select('select').property('value')
+        //             }
+        //         })
+        //         .attr('width', function(d) {
+        //             if (d.frequency >= cutoffVal) {
+        //                 return xScale(d.frequency)
+        //             } else {
+        //                 return 0;
+        //             }
+        //         })
+        // })
+        ;
 
 
     chart1 // or something else that selects the SVG element in your visualizations

@@ -9,12 +9,12 @@ body {
 	fill: black;
 }
 .selected {
-	stroke: red;
-	fill:red;
+	stroke:black!important;
+	fill:black!important;
 }
 .selected2 {
-	stroke: orange;
-	fill:orange;
+	stroke: black!important;
+	fill:black!important;
 }
 path.domain {
 	fill: none;
