@@ -106,10 +106,21 @@ d3.csv("colleges.csv", function(error, dataset) {
     }
 
     function clearText() {
-        d3.select("#medEarnings").text("");
+        d3.select("#name").text("");
+        d3.select("#control").text("");
+        d3.select("#region").text("");
+        d3.select("#locale").text("");
+        d3.select("#admissionRate").text("");
+        d3.select("#act").text("");
+        d3.select("#sat").text("");
+        d3.select("#population").text("");
         d3.select("#avgCost").text("");
+        d3.select("#expenditure").text("");
+        d3.select("#facultySalary").text("");
         d3.select("#medDebt").text("");
         d3.select("#medFamInc").text("");
+        d3.select("#numEmployed").text("");
+        d3.select("#medEarnings").text("");
     }
 
     function handleBrushMove1() {
@@ -164,6 +175,10 @@ d3.csv("colleges.csv", function(error, dataset) {
         .on("click", function(d,i){
             clearSelection();
             fillText(d);
+            chart1.selectAll("circle")
+                .classed("selected", function(d2) {
+                    return d == d2;
+                });
             chart2.selectAll("circle")
                 .classed("selected", function(d2) {
                     return d == d2;
@@ -186,6 +201,10 @@ d3.csv("colleges.csv", function(error, dataset) {
        .on("click", function(d,i){
             clearSelection();
             fillText(d);
+            chart2.selectAll("circle")
+                .classed("selected2", function(d2) {
+                    return d == d2;
+                });
             chart1.selectAll("circle")
                 .classed("selected2", function(d2) {
                     return d == d2;
