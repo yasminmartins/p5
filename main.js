@@ -148,7 +148,7 @@ d3.csv("colleges.csv", function(error, dataset) {
        .attr("cy", function(d) {
             return yScale(d["Median Earnings 8 years After Entry"]); })
        .attr("r", function(d) {
-            return rScale2(d["Number of Employed 8 years after entry"] * 4); });
+            return rScale2(d["Number of Employed 8 years after entry"] * 6); });
        //  .on("click", function(d,i){
        //      clearSelection();
        //      fillText(d);
@@ -209,7 +209,7 @@ d3.csv("colleges.csv", function(error, dataset) {
 
     chart2 // or something else that selects the SVG element in your visualizations
         .append("g") // create a group node
-        .attr("transform", "translate(0,"+ (width -30)+ ")")
+        .attr("transform", "translate(0,"+ (width - 30)+ ")")
         .call(xAxis2)
         .append("text")
         .attr("class", "label")
