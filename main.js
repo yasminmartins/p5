@@ -32,11 +32,11 @@ d3.csv("colleges.csv", function(error, dataset) {
     // Axis setup
     var xScale = d3.scaleLinear().domain(avgCost).range([50, 470]);
     var yScale = d3.scaleLinear().domain(medEarnings).range([470, 30]);
-    var rScale = d3.scaleSqrt().domain(numEmployed).range([1,10]);
+    var rScale = d3.scaleSqrt().domain(numEmployed).range([2,10]);
 
     var xScale2 = d3.scaleLinear().domain(medFamInc).range([50, 470]);
     var yScale2 = d3.scaleLinear().domain(medDebt).range([470, 30]);
-    var rScale2 = d3.scaleSqrt().domain(expenditure).range([1,10]);
+    var rScale2 = d3.scaleSqrt().domain(expenditure).range([2,10]);
 
     var xAxis = d3.axisBottom().scale(xScale).ticks(10).tickFormat(d3.format(".2s"));
     var yAxis = d3.axisLeft().scale(yScale).ticks(10).tickFormat(d3.format(".2s"));
@@ -216,7 +216,7 @@ d3.csv("colleges.csv", function(error, dataset) {
        .attr("cy", function(d) {
             return yScale(d["Median Earnings 8 years After Entry"]); })
        .attr("r", function(d) {
-            return rScale2(d["Number of Employed 8 years after entry"] * 6); })
+            return rScale(d["Number of Employed 8 years after entry"]); })
         .on("mouseover", handleMouseOver)
         .on("mouseout", handleMouseOut)
         .on("click", function(d,i){
