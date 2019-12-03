@@ -83,11 +83,6 @@ d3.csv("colleges.csv", function(error, dataset) {
                     .attr("width",width)
                     .attr("height",height);
 
-    var chart4 = d3.select("#chart1")
-                    .append("svg")
-                    .attr("width",width/4)
-                    .attr("height",height);
-
 
     /******************************************
 
@@ -373,32 +368,6 @@ d3.csv("colleges.csv", function(error, dataset) {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Median Debt on Graduation")
-        .style("fill", "black");
-
-    chart4 // or something else that selects the SVG element in your visualizations
-        .append("g") // create a group node
-        .attr("transform", "translate(0,"+ (width - 40)+ ")")
-        .call(xAxisDem)
-        .append("text")
-        .attr("class", "label")
-        .attr("x", width-200)
-        .attr("y", 30)
-        .style("text-anchor", "end")
-        .text("Ethnicity")
-        .style("fill", "black");
-
-    chart4 // or something else that selects the SVG element in your visualizations
-        .append("g") // create a group node
-        .attr("transform", "translate(50, 230)")
-        .call(yAxisDem)
-        .append("text")
-        .attr("class", "label")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -40)
-        .attr("x", -180)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("Percent")
         .style("fill", "black");
 
     var regions = ['Far West','Great Lakes', 'Great Plains', 'Mid-Atlantic', 'New England', 'Outlying Areas', 'Rocky Mountains', 'Southeast', 'Southwest']
