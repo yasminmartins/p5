@@ -34,7 +34,14 @@ d3.csv("colleges.csv", function(error, dataset) {
     var percentBiracial = d3.extent(colleges, function(d){
         return +d["% Biracial"]; });
 
-    //console.log("percent white: " + percentWhite);
+    var xScaleDem = d3.scaleOrdinal()
+        .domain([" White ", " Black ", " Hispanic ", " Asian ", " American Indian ", " Pacific Islander ", " Biracial"])
+        .range([25, 55, 85, 115, 145, 175, 205, 235]);
+    var yScaleDem = d3.scaleLinear().domain(percentWhite).range([230, 15]);
+
+    var xAxisDem = d3.axisBottom().scale(xScaleDem);
+    var yAxisDem = d3.axisLeft().scale(yScaleDem);
+
 
     // Axis setup
     var xScale = d3.scaleLinear().domain(avgCost).range([50, 470]);
@@ -76,45 +83,10 @@ d3.csv("colleges.csv", function(error, dataset) {
                     .attr("width",width)
                     .attr("height",height);
 
-    var chart3 = d3.select("#chart3")
-                   .append("svg")
-                   .attr("width", 400)
-                   .attr("height", 300)
-                   //.append("circle")
-                   .attr("cx", 140)
-                   .attr("cy", 150)
-                   .attr("r", 100)
-                   .attr("transform", "translate(0, -10)")
-                   .attr("stroke", "black")
-                   .attr("stroke-width", .5)
-                   .style("fill", "purple");
 
-    var y_scale3 = d3.scaleOrdinal()
-        .domain(["White", "Black", "Hispanic", "Asian", "Amer. Indian", "Pac. Islander", "Biracial"])
-        .range([30, 65, 100, 135, 170, 205, 240]);
-
-    var x_scale3 = d3.scaleLinear()
-        .domain([0, 100])
-        .range([10, 320]);
-
-    var x3 = d3.axisBottom(x_scale3).ticks(10);
-
-
-    chart3.append("g")
-        .attr("transform", "translate(70, 0)")
-        .call(d3.axisLeft(y_scale3));
-
-    chart3.append("g")
-        .attr("transform", "translate(60, 260)")
-        .call(x3);
-
-    chart3.append("text")
-        .attr("class", "label")
-        .attr("x", 190)
-        .attr("y", 290)
-        .text("% of Students")
-        .style("fill", "black")
-        ;
+    /******************************************
+        ADD BRUSHING CODE HERE
+    ******************************************/
 
     var brush1 = d3.brush()
         .extent([[0,0], [width, height]])
@@ -129,85 +101,6 @@ d3.csv("colleges.csv", function(error, dataset) {
         .on("end", handleBrushEnd);
 
     selectedChart = undefined;
-
-    function fillDemo(data) {
-        // white percentage
-        chart3.append('rect')
-            .attr("x", 70)
-            .attr("y", 22)
-            .transition()
-            .attr("width", data["% White"] * 310)
-            .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
-        console.log("percent white: " + data["% White"]);
-
-        // black percentage
-        chart3.append('rect')
-            .attr("x", 70)
-            .attr("y", 57)
-            .transition()
-            .attr("width", data["% Black"] * 310)
-            .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
-        console.log("percent black: " + data["% Black"]);
-
-        // hispanic percentage
-        chart3.append('rect')
-            .attr("x", 70)
-            .attr("y", 92)
-            .transition()
-            .attr("width", data["% Hispanic"] * 310)
-            .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
-        console.log("percent hispanic: " + data["% Hispanic"]);
-
-        // asian percentage
-        chart3.append('rect')
-            .attr("x", 70)
-            .attr("y", 127)
-            .transition()
-            .attr("width", data["% Asian"] * 310)
-            .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
-        console.log("percent asian: " + data["% Asian"]);
-
-        // american indian percentage
-        chart3.append('rect')
-            .attr("x", 70)
-            .attr("y", 162)
-            .transition()
-            .attr("width", data["% American Indian"] * 310)
-            .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
-        console.log("percent american indian: " + data["% American Indian"]);
-
-        // pacific islander
-        chart3.append('rect')
-            .attr("x", 70)
-            .attr("y", 197)
-            .transition()
-            .attr("width", data["% Pacific Islander"] * 310)
-            .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
-        console.log("percent pacific islander: " + data["% Pacific Islander"]);
-
-        // biracial
-        chart3.append('rect')
-            .attr("x", 70)
-            .attr("y", 232)
-            .transition()
-            .attr("width", data["% Biracial"] * 310)
-            .attr("height", 16)
-            .duration(1500)
-            .style("fill", "black");
-            console.log("percent biracial " + data["% Biracial"]);
-    }
 
     function handleBrushStart() {
         clearSelection();
@@ -293,6 +186,33 @@ d3.csv("colleges.csv", function(error, dataset) {
         clearText();
     }
 
+// this function doesnt work
+    function fillDemographics(d) {
+        bars.append('g')
+            .selectAll('.bar')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('class', 'bar')
+            .attr('x', 30)
+            .attr('y', function(d) {
+                return yDemScale(d["% AmericanIndian"]);
+            })
+            .attr('width', function(d) {
+                // xScale will map any number and return a number
+                // within the output range we specified earlier.
+                return xDemScale(2);
+            })
+            .attr('height', function(d) {
+                // Remember how we set the yScale to be an ordinal scale
+                // with bands from 0 to height? And then we set the domain
+                // to contain all the letters in the alphabet?
+                return yDemScale.bandwidth()*.8;
+            });
+    }
+
+
+
     chart1.append('g')
         .attr('class', 'brush')
         .call(brush1);
@@ -300,7 +220,6 @@ d3.csv("colleges.csv", function(error, dataset) {
     chart2.append('g')
         .attr('class', 'brush')
         .call(brush2);
-
 
     //add scatterplot points
     var temp1 = chart1.selectAll("circle")
@@ -312,15 +231,15 @@ d3.csv("colleges.csv", function(error, dataset) {
             if(d["Locale"].match(/Suburb/)){
                 return "darkslategray";
             }
-            if (d["Locale"].match(/Rural/)) {
+            if (d["Locale"].match(/Rural/)) {
                 return "powderblue";
-            }
-            if (d["Locale"].match(/City/)) {
-                return "silver";
-            } else {
-                return "olivedrab"
-            }
-       })
+            }
+            if (d["Locale"].match(/City/)) {
+                return "silver";
+            } else {
+                return "olivedrab"
+            }
+       })
        .attr("cx", function(d) {
             return xScale(d["Average Cost"]); })
        .attr("cy", function(d) {
@@ -345,7 +264,6 @@ d3.csv("colleges.csv", function(error, dataset) {
                 .classed("selected", function(d2) {
                     return d == d2;
                 });
-            fillDemo(d);
 
        });
 
@@ -355,12 +273,12 @@ d3.csv("colleges.csv", function(error, dataset) {
        .append("circle")
        .attr("id",function(d,i) {return i;} )
        .style("fill", function(d) {
-           if (d["Control"] == "Public") {
-               return "thistle";
-           } else {
-               return "darkmagenta";
-           }
-       })
+           if (d["Control"] == "Public") {
+               return "thistle";
+           } else {
+               return "darkmagenta";
+           }
+       })
        .attr("cx", function(d) {
             return xScale2(d["Median Family Income"]); })
        .attr("cy", function(d) {
@@ -385,7 +303,6 @@ d3.csv("colleges.csv", function(error, dataset) {
                 .classed("selected2", function(d2) {
                     return d == d2;
                 });
-            fillDemo(d);
 
        });
 
@@ -453,7 +370,7 @@ d3.csv("colleges.csv", function(error, dataset) {
 
     var regions = ['Far West','Great Lakes', 'Great Plains', 'Mid-Atlantic', 'New England', 'Outlying Areas', 'Rocky Mountains', 'Southeast', 'Southwest']
 
-    var dropdown = d3.select("#chart4")
+    var dropdown = d3.select("#chart3")
         .append('select')
         .style("border", "1px solid black")
         .on('change', filter);
@@ -475,14 +392,14 @@ d3.csv("colleges.csv", function(error, dataset) {
                     if(d["Locale"].match(/Suburb/)){
                         return "darkslategray";
                     }
-                    if (d["Locale"].match(/Rural/)) {
+                    if (d["Locale"].match(/Rural/)) {
                         return "powderblue";
-                    }
-                    if (d["Locale"].match(/City/)) {
-                        return "silver";
-                    } else {
-                        return "olivedrab"
-                    }
+                    }
+                    if (d["Locale"].match(/City/)) {
+                        return "silver";
+                    } else {
+                        return "olivedrab"
+                    }
                 } else
                     return 'rgba(255,255,255,0)';
             })
@@ -491,17 +408,17 @@ d3.csv("colleges.csv", function(error, dataset) {
             .style('fill', function(d) {
                 if (d.Region == selectValue) {
                     if (d["Control"] == "Public") {
-                        return "thistle";
-                    } else {
-                        return "darkmagenta";
-                    }
+                        return "thistle";
+                    } else {
+                        return "darkmagenta";
+                    }
                 } else {
                     return 'rgba(255,255,255,0)';
                 }
             })
         };
 
-    d3.select("#chart4")
+    d3.select("#chart3")
         .append('p')
         .append('button')
         .style("border", "1px solid black")
@@ -514,14 +431,14 @@ d3.csv("colleges.csv", function(error, dataset) {
                 if(d["Locale"].match(/Suburb/)){
                         return "darkslategray";
                     }
-                    if (d["Locale"].match(/Rural/)) {
+                    if (d["Locale"].match(/Rural/)) {
                         return "powderblue";
-                    }
-                    if (d["Locale"].match(/City/)) {
-                        return "silver";
-                    } else {
-                        return "olivedrab"
-                    }
+                    }
+                    if (d["Locale"].match(/City/)) {
+                        return "silver";
+                    } else {
+                        return "olivedrab"
+                    }
             })
             chart2.selectAll("circle")
             .transition()

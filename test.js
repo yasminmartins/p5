@@ -116,6 +116,17 @@ d3.csv("colleges.csv", function(error, dataset) {
         .style("fill", "black")
         ;
 
+    //  var bars = chart3.append('rect')
+    //  .attr("x", 10)
+    //  .attr("y",22)
+    //  .attr("width", 10)
+    //  .attr("height", 16);
+     /**
+
+        ADD BRUSHING CODE HERE
+
+    ******************************************/
+
     var brush1 = d3.brush()
         .extent([[0,0], [width, height]])
         .on("start", handleBrushStart)
@@ -226,6 +237,8 @@ d3.csv("colleges.csv", function(error, dataset) {
     function clearSelection() {
         d3.selectAll("circle").classed('selected', false);
         d3.selectAll("circle").classed('selected2', false);
+        d3.selectAll("rect").attr("width", 0)
+                            .attr("heigh", 0);
     }
 
     function fillText(d) {
