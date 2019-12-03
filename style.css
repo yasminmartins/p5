@@ -36,7 +36,8 @@ path.domain {
 	margin-left: 20px;
 }
 #chart4 {
-	float:right;
+    float:left;
+
 }
 .brush .extent {
 	fill-opacity: .1;

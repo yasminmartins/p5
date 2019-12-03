@@ -34,18 +34,13 @@ d3.csv("colleges.csv", function(error, dataset) {
     var percentBiracial = d3.extent(colleges, function(d){
         return +d["% Biracial"]; });
 
-    var xDemScale = d3.scaleOrdinal().domain([" White ", " Black ", " Hispanic ", " Asian ", " American Indian ", " Pacific Islander ", " Biracial"]).range([0,10]);
-    var yDemMax = Math.max(percentWhite, percentBlack, percentHispanic, percentAsian, percentAmericanIndian, percentPacificIslander, percentBiracial);
-    var percentScale = d3.scaleLinear().domain([0, yDemMax]).range([550,50]);
-    var yDemScale = d3.axisLeft(percentScale);
-    var xAxisDem = d3.axisBottom().scale(xDemScale);
-    var yAxisDem = d3.axisBottom().scale(yDemScale);
+    var xScaleDem = d3.scaleOrdinal()
+        .domain([" White ", " Black ", " Hispanic ", " Asian ", " American Indian ", " Pacific Islander ", " Biracial"])
+        .range([25, 55, 85, 115, 145, 175, 205, 235]);
+    var yScaleDem = d3.scaleLinear().domain(percentWhite).range([230, 15]);
 
-    var demSVG = d3.select("#chart4").append('g')
-    .attr('width', width)
-    .attr('height', height);
-
-    var bars = demSVG.append('g');
+    var xAxisDem = d3.axisBottom().scale(xScaleDem);
+    var yAxisDem = d3.axisLeft().scale(yScaleDem);
 
 
     // Axis setup
@@ -86,6 +81,11 @@ d3.csv("colleges.csv", function(error, dataset) {
     var chart2 = d3.select("#chart2")
                     .append("svg:svg")
                     .attr("width",width)
+                    .attr("height",height);
+
+    var chart4 = d3.select("#chart1")
+                    .append("svg")
+                    .attr("width",width/4)
                     .attr("height",height);
 
 
@@ -193,6 +193,7 @@ d3.csv("colleges.csv", function(error, dataset) {
         clearText();
     }
 
+// this function doesnt work
     function fillDemographics(d) {
         bars.append('g')
             .selectAll('.bar')
@@ -262,7 +263,6 @@ d3.csv("colleges.csv", function(error, dataset) {
         .on("click", function(d,i){
             clearSelection();
             fillText(d);
-            fillDemographics(d);
             chart1.selectAll("circle")
                 .classed("selected", function(d2) {
                     return d == d2;
@@ -375,31 +375,31 @@ d3.csv("colleges.csv", function(error, dataset) {
         .text("Median Debt on Graduation")
         .style("fill", "black");
 
-    demSVG // or something else that selects the SVG element in your visualizations
+    chart4 // or something else that selects the SVG element in your visualizations
         .append("g") // create a group node
-        .attr("transform", "translate(0,"+ width+ ")")
+        .attr("transform", "translate(0,"+ (width - 40)+ ")")
         .call(xAxisDem)
         .append("text")
         .attr("class", "label")
-        .attr("x", width)
+        .attr("x", width-200)
         .attr("y", 30)
         .style("text-anchor", "end")
-        .text("Percent Ethnicity")
+        .text("Ethnicity")
         .style("fill", "black");
 
-    // demSVG // or something else that selects the SVG element in your visualizations
-    //     .append("g") // create a group node
-    //     .attr("transform", "translate(50, 0)")
-    //     .call(yAxisDem)
-    //     .append("text")
-    //     .attr("class", "label")
-    //     .attr("transform", "rotate(-90)")
-    //     .attr("y", 0)
-    //     .attr("x", 0)
-    //     .attr("dy", ".71em")
-    //     .style("text-anchor", "end")
-    //     .text("Ethnicity")
-    //     .style("fill", "black");
+    chart4 // or something else that selects the SVG element in your visualizations
+        .append("g") // create a group node
+        .attr("transform", "translate(50, 230)")
+        .call(yAxisDem)
+        .append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -40)
+        .attr("x", -180)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Percent")
+        .style("fill", "black");
 
     var regions = ['Far West','Great Lakes', 'Great Plains', 'Mid-Atlantic', 'New England', 'Outlying Areas', 'Rocky Mountains', 'Southeast', 'Southwest']
 
