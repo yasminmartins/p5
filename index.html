@@ -2,11 +2,17 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
+		<title> College Data Visualization </title>
 		<link href="style.css" type="text/css" rel="stylesheet" />
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script type="text/javascript" src="main.js"></script>
    	</head>
    	<body>
+   		<div>
+        <tr><h1>CS 4460 P5: College Data Visualization</h1>
+        	<h2>Yasmin Martins and Jessie Price</h2>
+        	<br><br/>
+    	</div>
 	   	<div id="wrapper">
 			<div id="chart1">
 	    	</div>
@@ -33,5 +39,58 @@
 	        <div id="chart4">
 	        </div>
 	   	</div>
+	   	<div>
+        <svg width="1100" height="120">
+            <g class='legend' position='0,0' transform="translate(-10, 10)">
+                <g transform="translate(100, 10)">
+                    <circle r="8" cy="5" style="fill: darkslategray;"/>
+                    <text x="15" dy=".71em">Suburb</text>
+                </g>
+                <g transform="translate(100, 30)">
+                    <circle r="8" cy="5" style="fill: powderblue;"/>
+                    <text x="15" dy=".71em">Rural</text>
+                </g>
+                <g transform="translate(100, 50)">
+                    <circle r="8" cy="5" style="fill: silver;"/>
+                    <text x="15" dy=".71em">City</text>
+                </g>
+                <g transform="translate(100, 70)">
+                    <circle r="8" cy="5" style="fill: olivedrab;"/>
+                    <text x="15" dy=".71em">Town</text>
+                </g>
+                <g transform="translate(200, 10)">
+                    <circle r="2" cy="5" style="stroke: black;"/>
+                    <text x="15" dy=".71em">Small Number of Employed 8 Years After Entry</text>
+                </g>
+                <g transform="translate(200, 30)">
+                    <circle r="5" cy="5" style="stroke: black;"/>
+                    <text x="15" dy=".71em">Medium Number of Employed 8 Years After Entry</text>
+                </g>
+                <g transform="translate(200, 50)">
+                    <circle r="8" cy="5" style="stroke: black;"/>
+                    <text x="15" dy=".71em">Large Number of Employed 8 Years After Entry</text>
+                </g>
+                <g transform="translate(750, 10)">
+                    <circle r="8" cy="5" style="fill: darkmagenta;"/>
+                    <text x="15" dy=".71em">Private</text>
+                </g>
+                <g transform="translate(750, 30)">
+                    <circle r="8" cy="5" style="fill: thistle;"/>
+                    <text x="15" dy=".71em">Public</text>
+                </g>
+                <g transform="translate(850, 10)">
+                    <circle r="2" cy="5" style="stroke: black;"/>
+                    <text x="15" dy=".71em">Small Expenditure Per Student</text>
+                </g>
+                <g transform="translate(850, 30)">
+                    <circle r="5" cy="5" style="stroke: black;"/>
+                    <text x="15" dy=".71em">Medium Expenditure Per Student</text>
+                </g>
+                <g transform="translate(850, 50)">
+                    <circle r="8" cy="5" style="stroke: black;"/>
+                    <text x="15" dy=".71em">Large Expenditure Per Student</text>
+                </g>
+        </svg>
+    </div>
 	</body>
 </html>

@@ -236,15 +236,15 @@ d3.csv("colleges.csv", function(error, dataset) {
        .attr("id",function(d,i) {return i;} )
        .style("fill", function(d) {
             if(d["Locale"].match(/Suburb/)){
-                return "slategray";
+                return "darkslategray";
             }
             if (d["Locale"].match(/Rural/)) {
-                return "steelblue";
+                return "powderblue";
             }
             if (d["Locale"].match(/City/)) {
-                return "darkblue";
+                return "silver";
             } else {
-                return "darkgreen"
+                return "olivedrab"
             }
        })
        .attr("cx", function(d) {
@@ -423,15 +423,15 @@ d3.csv("colleges.csv", function(error, dataset) {
             .style('fill', function(d) {
                 if (d.Region == selectValue) {
                     if(d["Locale"].match(/Suburb/)){
-                        return "slategray";
+                        return "darkslategray";
                     }
                     if (d["Locale"].match(/Rural/)) {
-                        return "steelblue";
+                        return "powderblue";
                     }
                     if (d["Locale"].match(/City/)) {
-                        return "darkblue";
+                        return "silver";
                     } else {
-                        return "darkgreen"
+                        return "olivedrab"
                     }
                 } else
                     return 'rgba(255,255,255,0)';
@@ -462,15 +462,15 @@ d3.csv("colleges.csv", function(error, dataset) {
             .transition()
             .style('fill', function(d) {
                 if(d["Locale"].match(/Suburb/)){
-                        return "slategray";
+                        return "darkslategray";
                     }
                     if (d["Locale"].match(/Rural/)) {
-                        return "steelblue";
+                        return "powderblue";
                     }
                     if (d["Locale"].match(/City/)) {
-                        return "darkblue";
+                        return "silver";
                     } else {
-                        return "darkgreen"
+                        return "olivedrab"
                     }
             })
             chart2.selectAll("circle")
