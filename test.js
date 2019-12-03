@@ -238,7 +238,7 @@ d3.csv("colleges.csv", function(error, dataset) {
         d3.selectAll("circle").classed('selected', false);
         d3.selectAll("circle").classed('selected2', false);
         d3.selectAll("rect").attr("width", 0)
-                            .attr("heigh", 0);
+                            .attr("height", 0);
     }
 
     function fillText(d) {

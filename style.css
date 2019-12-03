@@ -16,6 +16,9 @@ body {
 	stroke: black!important;
 	fill:black!important;
 }
+.hidden {
+	fill:rgba(255,255,255,0)!important;
+}
 path.domain {
 	fill: none;
 	stroke-width: 2px;

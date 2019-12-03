@@ -119,14 +119,12 @@ d3.csv("colleges.csv", function(error, dataset) {
     var brush1 = d3.brush()
         .extent([[0,0], [width, height]])
         .on("start", handleBrushStart)
-        .on("brush", handleBrushMove1)
-        .on("end", handleBrushEnd);
+        .on("brush", handleBrushMove1);
 
     var brush2 = d3.brush()
         .extent([[0,0], [width, height]])
         .on("start", handleBrushStart)
-        .on("brush", handleBrushMove2)
-        .on("end", handleBrushEnd);
+        .on("brush", handleBrushMove2);
 
     selectedChart = undefined;
 
@@ -135,77 +133,77 @@ d3.csv("colleges.csv", function(error, dataset) {
         chart3.append('rect')
             .attr("x", 70)
             .attr("y", 22)
+            .style("fill", "black")
             .transition()
             .attr("width", data["% White"] * 310)
             .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
+            .attr("height", 16);
         console.log("percent white: " + data["% White"]);
 
         // black percentage
         chart3.append('rect')
             .attr("x", 70)
             .attr("y", 57)
+            .style("fill", "black")
             .transition()
             .attr("width", data["% Black"] * 310)
             .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
+            .attr("height", 16);
         console.log("percent black: " + data["% Black"]);
 
         // hispanic percentage
         chart3.append('rect')
             .attr("x", 70)
             .attr("y", 92)
+            .style("fill", "black")
             .transition()
             .attr("width", data["% Hispanic"] * 310)
             .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
+            .attr("height", 16);
         console.log("percent hispanic: " + data["% Hispanic"]);
 
         // asian percentage
         chart3.append('rect')
             .attr("x", 70)
             .attr("y", 127)
+            .style("fill", "black")
             .transition()
             .attr("width", data["% Asian"] * 310)
             .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
+            .attr("height", 16);
         console.log("percent asian: " + data["% Asian"]);
 
         // american indian percentage
         chart3.append('rect')
             .attr("x", 70)
             .attr("y", 162)
+            .style("fill", "black")
             .transition()
             .attr("width", data["% American Indian"] * 310)
             .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
+            .attr("height", 16);
         console.log("percent american indian: " + data["% American Indian"]);
 
         // pacific islander
         chart3.append('rect')
             .attr("x", 70)
             .attr("y", 197)
+            .style("fill", "black")
             .transition()
             .attr("width", data["% Pacific Islander"] * 310)
             .duration(1500)
-            .attr("height", 16)
-            .style("fill", "black");
+            .attr("height", 16);
         console.log("percent pacific islander: " + data["% Pacific Islander"]);
 
         // biracial
         chart3.append('rect')
             .attr("x", 70)
             .attr("y", 232)
+            .style("fill", "black")
             .transition()
             .attr("width", data["% Biracial"] * 310)
             .attr("height", 16)
-            .duration(1500)
-            .style("fill", "black");
+            .duration(1500);
             console.log("percent biracial " + data["% Biracial"]);
     }
 
@@ -216,16 +214,11 @@ d3.csv("colleges.csv", function(error, dataset) {
 
     }
 
-    function handleBrushEnd() {
-        if (d3.event.selection) {
-            svg.selectAll('.hidden').classed('hidden', false);
-            selectedChart = undefined;
-        }
-    }
-
     function clearSelection() {
         d3.selectAll("circle").classed('selected', false);
         d3.selectAll("circle").classed('selected2', false);
+        chart3.selectAll("rect").attr("width", 0)
+                                .attr("height", 0);
     }
 
     function fillText(d) {
@@ -466,6 +459,7 @@ d3.csv("colleges.csv", function(error, dataset) {
             return d; })
 
     function filter() {
+        clearSelection();
         clearText();
         selectValue = d3.select("select").property("value");
         chart1.selectAll("circle")
