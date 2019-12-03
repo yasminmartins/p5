@@ -34,25 +34,18 @@ d3.csv("colleges.csv", function(error, dataset) {
     var percentBiracial = d3.extent(colleges, function(d){
         return +d["% Biracial"]; });
 
-    var xDemScale = d3.scaleOrdinal().domain(["% White", "% Black", "% Hispanic", "% Asian", "% American Indian", "% Pacific Islander", "%Biracial"]).range([0,10]);
+    var xDemScale = d3.scaleOrdinal().domain([" White ", " Black ", " Hispanic ", " Asian ", " American Indian ", " Pacific Islander ", " Biracial"]).range([0,10]);
     var yDemMax = Math.max(percentWhite, percentBlack, percentHispanic, percentAsian, percentAmericanIndian, percentPacificIslander, percentBiracial);
     var percentScale = d3.scaleLinear().domain([0, yDemMax]).range([550,50]);
     var yDemScale = d3.axisLeft(percentScale);
     var xAxisDem = d3.axisBottom().scale(xDemScale);
     var yAxisDem = d3.axisBottom().scale(yDemScale);
 
-    // var demSVG = d3.select("#chart3").append('g')
-    // .attr('width', width)
-    // .attr('height', height);
-    // demSVG.selectAll('.bar') //region bar graphs
-    //     .data(colleges)
-    //     .enter()
-    //     .append("circle")
-    //     .attr("id",function(d,i) {return i;} )
-    //     .attr("cx", function(d) {
-    //         return xDemScale(d["Median Family Income"]); })
-    //     .attr("cy", function(d) {
-    //         return yDemScale(d["Median Debt on Graduation"]); });
+    var demSVG = d3.select("#chart4").append('g')
+    .attr('width', width)
+    .attr('height', height);
+
+    var bars = demSVG.append('g');
 
 
     // Axis setup
@@ -200,6 +193,31 @@ d3.csv("colleges.csv", function(error, dataset) {
         clearText();
     }
 
+    function fillDemographics(d) {
+        bars.append('g')
+            .selectAll('.bar')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('class', 'bar')
+            .attr('x', 30)
+            .attr('y', function(d) {
+                return yDemScale(d["% AmericanIndian"]);
+            })
+            .attr('width', function(d) {
+                // xScale will map any number and return a number
+                // within the output range we specified earlier.
+                return xDemScale(2);
+            })
+            .attr('height', function(d) {
+                // Remember how we set the yScale to be an ordinal scale
+                // with bands from 0 to height? And then we set the domain
+                // to contain all the letters in the alphabet?
+                return yDemScale.bandwidth()*.8;
+            });
+    }
+
+
 
     chart1.append('g')
         .attr('class', 'brush')
@@ -244,6 +262,7 @@ d3.csv("colleges.csv", function(error, dataset) {
         .on("click", function(d,i){
             clearSelection();
             fillText(d);
+            fillDemographics(d);
             chart1.selectAll("circle")
                 .classed("selected", function(d2) {
                     return d == d2;
@@ -355,6 +374,32 @@ d3.csv("colleges.csv", function(error, dataset) {
         .style("text-anchor", "end")
         .text("Median Debt on Graduation")
         .style("fill", "black");
+
+    demSVG // or something else that selects the SVG element in your visualizations
+        .append("g") // create a group node
+        .attr("transform", "translate(0,"+ width+ ")")
+        .call(xAxisDem)
+        .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 30)
+        .style("text-anchor", "end")
+        .text("Percent Ethnicity")
+        .style("fill", "black");
+
+    // demSVG // or something else that selects the SVG element in your visualizations
+    //     .append("g") // create a group node
+    //     .attr("transform", "translate(50, 0)")
+    //     .call(yAxisDem)
+    //     .append("text")
+    //     .attr("class", "label")
+    //     .attr("transform", "rotate(-90)")
+    //     .attr("y", 0)
+    //     .attr("x", 0)
+    //     .attr("dy", ".71em")
+    //     .style("text-anchor", "end")
+    //     .text("Ethnicity")
+    //     .style("fill", "black");
 
     var regions = ['Far West','Great Lakes', 'Great Plains', 'Mid-Atlantic', 'New England', 'Outlying Areas', 'Rocky Mountains', 'Southeast', 'Southwest']
 
